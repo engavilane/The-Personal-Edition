@@ -6,7 +6,7 @@ no: "0142"
 meta: ["Idea", "Tag: reading"]
 featured: true
 cover: "/images/commonplace-book.jpg"
-coverAlt: "Annotations on a book + a coffe = perfect date"
+coverAlt: "Annotations on a book + a coffee = perfect date"
 ---
 
 A commonplace book is a notebook where you copy out the things you want to keep: a sentence from a novel, a recipe, a line overheard on a train, a fact you will need again. The name comes from the Latin *loci communes*, the "common places" or headings under which a reader filed what they found.

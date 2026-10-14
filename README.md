@@ -1,43 +1,49 @@
-# Astro Starter Kit: Minimal
+# The Personal Edition
 
-```sh
-npm create astro@latest -- --template minimal
+Site personnel d'Enya, construit avec [Astro](https://astro.build), en palette « Marché ».
+
+## Démarrer
+
+```bash
+npm install
+npm run dev       # http://localhost:4321, avec rechargement automatique
+npm run build     # génère le site statique dans dist/
+npm run preview   # sert dist/ pour vérifier avant publication
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+Node 22.12 ou plus récent est nécessaire.
 
-## 🚀 Project Structure
+## Écrire un article
 
-Inside of your Astro project, you'll see the following folders and files:
+Chaque article est un fichier Markdown. Le dossier dans lequel il se trouve décide de sa rubrique :
 
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
-```
+| Dossier | Rubrique |
+| --- | --- |
+| `src/content/lab/` | The Lab |
+| `src/content/magazine/` | The Magazine |
+| `src/content/guide/` | The Tourist Guide |
+| `src/content/index/` | The Index |
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+Copie `src/content/_template.md` dans le bon dossier et remplis l'en-tête. Le nom du fichier devient l'adresse de la page (`lab/mon-projet.md` donne `/lab/mon-projet/`). Les articles les plus récents passent en premier, et `featured: true` place un article en grand en haut de sa rubrique. Avec `draft: true`, l'article n'apparaît qu'avec `npm run dev`.
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+Les photos vont dans `public/images/` et se référencent dans l'en-tête avec `cover: "/images/ma-photo.jpg"`. Sans photo, une illustration dans la couleur de la rubrique s'affiche à la place.
 
-Any static assets, like images, can be placed in the `public/` directory.
+Les 16 articles présents sont des exemples à remplacer.
 
-## 🧞 Commands
+## Où modifier quoi
 
-All commands are run from the root of the project, from a terminal:
+- Couleurs et typographie : `src/styles/global.css` (les variables en haut du fichier)
+- Textes des rubriques (intro, encadré, série) : `src/data/sections.ts`
+- En-tête, navigation et pied de page : `src/layouts/Base.astro`
+- Page d'accueil : `src/pages/index.astro`
+- Gabarit de rubrique : `src/pages/[section]/index.astro`
+- Gabarit d'article : `src/pages/[section]/[...slug].astro`
+- Illustrations de remplacement : `src/components/Visual.astro`
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+## Mettre en ligne (GitHub Pages, gratuit)
 
-## 👀 Want to learn more?
+1. Crée un dépôt GitHub et pousse ce dossier sur la branche `main`.
+2. Dans le dépôt, va dans Settings > Pages et choisis « GitHub Actions » comme source.
+3. Mets ton adresse dans `site` de `astro.config.mjs`. Si le dépôt ne s'appelle pas `<ton-nom>.github.io`, mets aussi `base: '/nom-du-depot'`.
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+Le fichier `.github/workflows/deploy.yml` republie le site à chaque push.

@@ -1,0 +1,75 @@
+---
+import Base from '../layouts/Base.astro';
+import { SECTIONS } from '../data/sections';
+import { getEntries, entryHref, href, fmtDay } from '../data/entries';
+
+const latest = Object.fromEntries(await Promise.all(SECTIONS.map(async (s) => {
+  const list = await getEntries(s.key);
+  return [s.key, list.find((e) => e.data.featured) ?? list[0]];
+})));
+const indexEntries = (await getEntries('index')).slice(0, 5);
+const essay = latest.magazine;
+---
+<Base>
+  <div class="wrap">
+    <section class="cover">
+      <div class="plate d-magazine" role="img" aria-label="Cover of Issue 001">
+        <span class="mono">Cover · Issue 001</span>
+        <span class="big">Things<br />worth<br />exploring</span>
+        <span class="cap mono"><span>Photograph: Enya</span><span>Paris, October</span></span>
+      </div>
+      <div class="cover-text">
+        <span class="mono muted">In this issue</span>
+        <h2>A collection of things <em>worth exploring.</em></h2>
+        <p class="lede">An independent publication about science, images, ideas, and the places in between. Edited, written and photographed by one person.</p>
+        <ul class="toc">
+          {SECTIONS.map((s) => latest[s.key] && (
+            <li class={`d-${s.key}`}><a href={entryHref(latest[s.key])}><span class="mono">{s.n}</span><span class="t">{latest[s.key].data.title}</span><span class="dot" aria-hidden="true"></span></a></li>
+          ))}
+        </ul>
+      </div>
+    </section>
+
+    <div class="sec-head"><h2>The sections</h2><span class="mono">Four sections, one publication</span></div>
+    <div class="cards">
+      {SECTIONS.map((s) => (
+        <a class={`card d-${s.key}`} href={href(`/${s.key}/`)}>
+          <div class="band mono"><span>{s.n}</span><span>{s.kicker}</span></div>
+          <div class="in">
+            <h3>{s.name}</h3>
+            <p class="dek">{s.dek}</p>
+            {latest[s.key] && <p class="latest"><span class="mono">Latest</span>{latest[s.key].data.title}</p>}
+          </div>
+        </a>
+      ))}
+    </div>
+  </div>
+
+  {essay && (
+    <section class="quote">
+      <div class="wrap">
+        <span class="mono">From The Magazine</span>
+        <div>
+          <blockquote>“I wanted a place for everything I find interesting, arranged with the care of a magazine and the patience of a notebook.”</blockquote>
+          <cite class="mono"><a href={entryHref(essay)}>{essay.data.title}</a> · Issue 001</cite>
+        </div>
+      </div>
+    </section>
+  )}
+
+  <div class="wrap ledger d-index">
+    <div class="sec-head"><h2>Recently added to The Index</h2><a class="mono" href={href('/index/')}>See the whole Index</a></div>
+    <div class="ledger-wrap">
+      <table class="ledger-table"><tbody>
+        {indexEntries.map((e) => (
+          <tr>
+            <td class="mono">No. {e.data.no}</td>
+            <td><span class="pill mono">{e.data.meta[0]}</span></td>
+            <td class="what"><a href={entryHref(e)}>{e.data.title}</a></td>
+            <td class="mono">{fmtDay(e.data.date)}</td>
+          </tr>
+        ))}
+      </tbody></table>
+    </div>
+  </div>
+</Base>

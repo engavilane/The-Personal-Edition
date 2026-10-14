@@ -1,0 +1,36 @@
+---
+import { render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import Visual from '../../components/Visual.astro';
+import { sectionByKey } from '../../data/sections';
+import { getEntries, sectionOf, slugOf, href, fmtDay, type Entry } from '../../data/entries';
+
+export async function getStaticPaths() {
+  const entries = await getEntries();
+  return entries.map((entry) => ({ params: { section: sectionOf(entry), slug: slugOf(entry) }, props: { entry } }));
+}
+const { entry } = Astro.props as { entry: Entry };
+const s = sectionByKey(sectionOf(entry))!;
+const { Content } = await render(entry);
+const d = entry.data;
+---
+<Base title={d.title} description={d.dek} current={s.key} compact>
+  <article class={`d-${s.key}`}>
+    <header class="a-head">
+      <div class="wrap">
+        <div class="kicker mono">
+          <a class="tag" href={href(`/${s.key}/`)}>{s.name}</a>
+          {d.no && <span>No. {d.no}</span>}
+          {d.series && <span>{d.series}</span>}
+          <span class="muted">{fmtDay(d.date)}</span>
+        </div>
+        <h1>{d.title}</h1>
+        <p class="dek">{d.dek}</p>
+        {d.meta.length > 0 && <div class="meta mono">{d.meta.map((m) => <span>{m}</span>)}</div>}
+        <div class="a-cover"><Visual section={s.key} cover={d.cover} alt={d.coverAlt} /></div>
+      </div>
+    </header>
+    <div class="wrap"><div class="prose"><Content /></div></div>
+    <div class="wrap"><div class="a-foot mono"><a href={href(`/${s.key}/`)}>Back to {s.name}</a><a href={href('/')}>The Personal Edition</a></div></div>
+  </article>
+</Base>

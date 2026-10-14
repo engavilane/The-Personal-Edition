@@ -5,6 +5,6 @@ import { defineConfig } from 'astro/config';
 // e.g. https://<your-github-username>.github.io
 export default defineConfig({
   site: 'https://engavilane.github.io',
-  base: '/',
+  base: '/The-Personal-Edition',
   trailingSlash: 'always',
 });

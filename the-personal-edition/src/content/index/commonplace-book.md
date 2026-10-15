@@ -5,7 +5,7 @@ date: 2026-10-14
 no: "0142"
 meta: ["Idea", "Tag: reading"]
 featured: true
-cover: "/images/commonplace-book.jpg"
+cover: "/images/commonplace-book.JPG"
 coverAlt: "Annotations on a book + a coffee = perfect date"
 ---
 
